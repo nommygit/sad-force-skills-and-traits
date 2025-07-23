@@ -26,8 +26,21 @@ def generate_templates_lua_string(templates_dir='Templates'):
 	if not templates_path.is_dir():
 		raise FileNotFoundError(f"Directory not found: {templates_dir}")
 
+	def find_matching_brace(s, start, initial_count=1):
+		count = initial_count
+		pos = start
+		while pos < len(s):
+			if s[pos] == '{':
+				count += 1
+			elif s[pos] == '}':
+				count -= 1
+				if count == 0:
+					return pos
+			pos += 1
+		return pos
+
 	placeobj_re = re.compile(
-		r"PlaceObj\(\s*'(?P<class>[^']+)'\s*,\s*\{(?P<args>[\s\S]*?)\}\s*\)",
+		r"PlaceObj\(\s*'(?P<class>[^']+)'\s*,\s*\{",
 		re.MULTILINE
 	)
 
@@ -42,10 +55,14 @@ def generate_templates_lua_string(templates_dir='Templates'):
 		items = []
 		for m in placeobj_re.finditer(body):
 			cls = m.group('class')
-			args = m.group('args').strip()
+			start_index = m.end()
+			end_index = find_matching_brace(body, start_index, 1)
+			if end_index >= len(body):
+				raise ValueError(f"Unmatched brace in PlaceObj call for class {cls} in file {lua_file}")
+			args_str = body[start_index:end_index].strip()
 
 			# Clean up the arguments
-			args = re.sub(r"\{\s*,", "{", args)  # Remove commas after opening braces
+			args = re.sub(r"\{\s*,", "{", args_str)  # Remove commas after opening braces
 			args = re.sub(r",\s*\}", "}", args)  # Remove commas before closing braces
 			args = re.sub(r",\s*$", "", args)    # Remove trailing commas
 			
