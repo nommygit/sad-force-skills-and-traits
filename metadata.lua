@@ -1,7 +1,7 @@
 return PlaceObj('ModDef', {
 	'title', "Force Skills and Traits",
 	'description', "Options to control changing skills and traits of survivors.\n\nBy default makes no changes.\n\nCan be used to:\n - 'Character Editor' (make specific changes to a single survivor on game load)\n - Remove unwanted traits\n - Set skills, interests and traits for every survivor that joins\n - Set minimum or maximum skill level",
-	'id', "zzzFSaT",
+	'id', "zzzzzFS",
 	'author', "Nommy",
 	'version', 13,
 	'lua_revision', 233360,
