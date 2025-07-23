@@ -61,7 +61,7 @@ local function ApplyTraitChanges(survivor, trait_id)
 end
 
 function ApplyModificationsToSurvivor(survivor)
-	debug("ApplyModificationsToSurvivor("..tostring(survivor)..")")
+	debug("ApplyModificationsToSurvivor("..tostring(survivor.id)..")")
 	-- Apply skill modifications
 	ForEachPreset("Skill", function(skill)
 		ApplySkillChanges(survivor, skill.id)
@@ -85,9 +85,9 @@ function ApplyModifications()
 	local apply_to = CurrentModOptions.ApplyTo
 	local targets = {}
 	
-	if not apply_to or apply_to == "Nobody (disable mod)" then
+	if not apply_to then
 		return
-	elseif apply_to == "All Survivors" then
+	elseif apply_to == "*All Survivors*" then
 		targets = AllSurvivors
 	else
 		-- Find specific survivor by name
