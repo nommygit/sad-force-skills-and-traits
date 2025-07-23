@@ -14,10 +14,8 @@ PlaceObj('ModItemOptionChoice', {
 	'name', "ApplyTo",
 	'DisplayName', "Apply To",
 	'Help', "Which survivors to apply the changes to.",
-	'DefaultValue', "All Survivors",
-	'ChoiceList', FSaT_AppendSurvivorNamesArray({
-		"All Survivors",
-		"Nobody (disable mod)",
+	'DefaultValue', "*All Survivors*",
+	'ChoiceList', "{$FSaT_OptionApplyToChoiceList()}",
 	})
 }),
 }

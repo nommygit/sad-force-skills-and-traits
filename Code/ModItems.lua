@@ -28,15 +28,25 @@ Example:
 ]]
 local function Substitute(template, values)
 	if type(template) == "string" then
-		if not values or next(values) == nil then return template end
+		if template == "{$FSaT_OptionApplyToChoiceList()}" then
+			return FSaT_OptionApplyToChoiceList()
+		end
+		
+		if not values or next(values) == nil then 
+			return template 
+		end
+		
 		return template:gsub("%${(.-)}", function(k)
 			local v = values[k]
-			if type(v) == "table" then return table.concat(v, ", ") end
+			if type(v) == "table" then 
+				return table.concat(v, ", ") 
+			end
 			return tostring(v or "")
 		end)
 	elseif type(template) == "table" then
 		local out = {}
 		for k, v in pairs(template) do
+			-- Recursively process all table elements
 			out[k] = Substitute(v, values)
 		end
 		return out
