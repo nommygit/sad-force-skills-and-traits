@@ -39,6 +39,7 @@ Returns:
 	A new string or table with all matching placeholders replaced.
 
 Notes:
+	- {$FSaT_OptionApplyToChoiceList()}" is replaced with result of FSaT_OptionApplyToChoiceList()
 	- If `values` is nil or empty, the original template is returned unchanged.
 	- Subtables are processed recursively.
 	- If a value is a table, it is joined with ", ".
@@ -195,7 +196,7 @@ local function SortedTraits()
 end
 
 --[[
-FSaT_BuildItems()
+FSaT_BuildItems()    run from items.lua
 
 Constructs and returns a sequenced list of mod‑option objects by:
   1. Instantiating core templates (ModCodeItems, ApplyOptions)
@@ -236,22 +237,4 @@ function FSaT_BuildItems()
 		})
 	end
 	return items
-end
-
-
-local function ForceSkillsAndTraitsToAll()
-
-end
-
-local function ForceSkillsAndTraitsToSurvivor(survivor)
-
-end
-
--- ForEachPreset("CharacterDef", function(unit, group) print(unit.id) end)
--- CurrentModOptions.OnlyTameableFauna
-
-local function ApplySkills()
-end
-
-local function ApplyTraits()
 end
