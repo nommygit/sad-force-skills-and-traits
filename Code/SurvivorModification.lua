@@ -92,7 +92,8 @@ function ApplyModifications()
 	else
 		-- Find specific survivor by name
 		for _, survivor in ipairs(AllSurvivors) do
-			if survivor.name == apply_to then
+			local name = _InternalTranslate(survivor.FirstName).." ".._InternalTranslate(survivor.LastName)
+			if name == apply_to then
 				table.insert(targets, survivor)
 				break
 			end
