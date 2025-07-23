@@ -1,5 +1,8 @@
 return {
 PlaceObj('ModItemCode', {
+	'CodeFileName', "Code/Helpers.lua",
+}),
+PlaceObj('ModItemCode', {
 	'CodeFileName', "Code/Templates.lua",
 }),
 PlaceObj('ModItemCode', {

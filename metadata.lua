@@ -7,6 +7,7 @@ return PlaceObj('ModDef', {
 	'lua_revision', 233360,
 	'saved_with_revision', 352677,
 	'code', {
+		"Code/Helpers.lua",
 		"Code/Templates.lua",
 		"Code/ModItems.lua",
 		"Code/SurvivorModification.lua",

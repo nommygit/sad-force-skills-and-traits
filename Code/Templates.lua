@@ -75,12 +75,9 @@ FSaT_Templates = {
 				'DisplayName', "Apply To",
 				'Help', "Which survivors to apply the changes to.",
 				'DefaultValue', "All Survivors",
-				'ChoiceList', {
+				'ChoiceList', FSaT_AppendSurvivorNamesArray({
 					"All Survivors",
-					"Nobody (disable mod)",
-					"Dick",
-					"Jane",
-					"Harry"}
+					"Nobody (disable mod)"})
 		} }
 	},
 
@@ -99,6 +96,9 @@ FSaT_Templates = {
 	-- ModCodeItems.lua
 
 	['ModCodeItems'] = {
+		{ class = 'ModItemCode', args = {
+				'CodeFileName', "Code/Helpers.lua"
+		} },
 		{ class = 'ModItemCode', args = {
 				'CodeFileName', "Code/Templates.lua"
 		} },
