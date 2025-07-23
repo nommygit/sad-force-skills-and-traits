@@ -1,8 +1,8 @@
 return {
 PlaceObj('ModItemOptionChoice', {
-	'name', "${id}Action",
-	'DisplayName', "${DisplayName}",
-	'Help', "${Description}",
+	'name', "{$id}Action",
+	'DisplayName', "{$DisplayName}",
+	'Help', "{$Description}",
 	'DefaultValue', "Don't change",
 	'ChoiceList', {
 		"Don't change",
@@ -12,18 +12,18 @@ PlaceObj('ModItemOptionChoice', {
 	},
 }),
 PlaceObj('ModItemOptionNumber', {
-	'name', "${id}Value",
+	'name', "{$id}Value",
 	'NameColor', RGBA(191, 183, 175, 255),
-	'DisplayName', "${DisplayName}",
-	'Help', "${DisplayName} value. Used by option above.",
+	'DisplayName', "{$DisplayName}",
+	'Help', "{$DisplayName} value. Used by option above.",
 	'DisplayColor', RGBA(20, 20, 20, 255),
 	'DefaultValue', 3,
 	'MaxValue', 10,
 }),
 PlaceObj('ModItemOptionChoice', {
-	'name', "${id}Inclination",
-	'DisplayName', "${DisplayName} Inclination",
-	'Help', "${Description}",
+	'name', "{$id}Inclination",
+	'DisplayName', "{$DisplayName} Inclination",
+	'Help', "{$Description}",
 	'DefaultValue', "Don't change",
 	'ChoiceList', {
 		"Don't change",

@@ -31,9 +31,9 @@ Recursively replaces placeholders in a string or table template using a values t
 
 Arguments:
 	template (string or table): A string or nested table containing placeholders
-		in the format "${key}" to be replaced.
+		in the format "{$key}" to be replaced.
 	values (table, optional): A key–value table containing substitutions. Each key replaces
-		occurrences of "${key}" in strings within the template. If nil or empty, the template is returned unchanged.
+		occurrences of "{$key}" in strings within the template. If nil or empty, the template is returned unchanged.
 
 Returns:
 	A new string or table with all matching placeholders replaced.
@@ -47,8 +47,8 @@ Notes:
 
 Example:
 	local template = {
-		title = "Welcome, ${user}!",
-		options = { "Option: ${opt1}", "Option: ${opt2}" }
+		title = "Welcome, {$user}!",
+		options = { "Option: {$opt1}", "Option: {$opt2}" }
 	}
 	local values = { user = "Alex", opt1 = "A", opt2 = "B" }
 	local result = Substitute(template, values)
@@ -64,7 +64,7 @@ local function Substitute(template, values)
 			return template 
 		end
 		
-		return template:gsub("%${(.-)}", function(k)
+		return template:gsub("{%$(.-)}", function(k)
 			local v = values[k]
 			if type(v) == "table" then 
 				return table.concat(v, ", ") 
@@ -142,7 +142,7 @@ Appends a substituted copy of a template into a destination array.
 
 Arguments:
 	dest (table): Array‑style table to receive new entries.
-	template (table): Array of PlaceObj–style entries with "${…}" placeholders.
+	template (table): Array of PlaceObj–style entries with "{$…}" placeholders.
 	substituteValues (table): Key–value map for placeholder replacement.
 
 Behavior:
