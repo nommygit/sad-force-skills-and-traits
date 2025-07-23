@@ -1,8 +1,11 @@
--- Returns a table array containing the full names of all defined survivors (CharacterDefs)
+-- Returns a sorted table array containing the full names of all defined survivors (CharacterDefs)
 local function FSaT_SurvivorNamesArray()
 	local names = {}
 	ForEachPreset("CharacterDef", function(unit, group) 
 		table.insert(names, _InternalTranslate(unit.FirstName).." ".._InternalTranslate(unit.LastName))
+	end)
+	table.sort(names, function(a, b)
+		return a < b
 	end)
 	return names
 end
@@ -51,6 +54,7 @@ Example:
 ]]
 local function Substitute(template, values)
 	if type(template) == "string" then
+		-- Add all character names to Apply To option choices
 		if template == "{$FSaT_OptionApplyToChoiceList()}" then
 			return FSaT_OptionApplyToChoiceList()
 		end
