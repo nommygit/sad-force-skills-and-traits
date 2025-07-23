@@ -195,6 +195,24 @@ local function SortedTraits()
 	return sortedTraits
 end
 
+local function BuildTraitDescription(trait)
+	local description = _InternalTranslate(trait.Description)
+	if trait.Incompatible and #trait.Incompatible > 0 then
+		description = description..".  Incompatible with: "
+		local incompatible = trait.Incompatible
+		local addComma = false
+		for i, id in ipairs(incompatible) do
+			local incompatibleTrait = Traits[id]
+			if incompatibleTrait then
+				if addComma then description = description..", " end
+				description = description.._InternalTranslate(incompatibleTrait.DisplayName)
+				addComma = true
+			end
+		end
+	end
+	return description
+end
+
 --[[
 FSaT_BuildItems()    run from items.lua
 
@@ -233,7 +251,7 @@ function FSaT_BuildItems()
 		GenerateAndAppendModItems(items, FSaT_Templates.TraitOptions, {
 			id = trait.id,
 			DisplayName = _InternalTranslate(trait.DisplayName),
-			Description = _InternalTranslate(trait.Description)
+			Description = BuildTraitDescription(trait)
 		})
 	end
 	return items
