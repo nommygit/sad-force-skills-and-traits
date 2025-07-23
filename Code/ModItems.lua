@@ -46,7 +46,7 @@ end
 	Creates choice list for "Apply To" option
 	@return table: Array containing "*All Survivors*" and survivor names
 ]]
-local function FSaT_OptionApplyToChoiceList()
+local function OptionApplyToChoiceList()
 	return AppendSurvivorNamesArray({"*All Survivors*"})
 end
 
@@ -59,8 +59,8 @@ end
 local function Substitute(template, values)
 	if type(template) == "string" then
 		-- Handle special substitution for survivor list
-		if template == "{$FSaT_OptionApplyToChoiceList()}" then
-			return FSaT_OptionApplyToChoiceList()
+		if template == "{$OptionApplyToChoiceList()}" then
+			return OptionApplyToChoiceList()
 		end
 		
 		if not values or next(values) == nil then 

@@ -15,7 +15,7 @@ PlaceObj('ModItemOptionChoice', {
 	'DisplayName', "Apply To",
 	'Help', "Which survivors to apply the changes to.",
 	'DefaultValue', "*All Survivors*",
-	'ChoiceList', "{$FSaT_OptionApplyToChoiceList()}",
+	'ChoiceList', "{$OptionApplyToChoiceList()}",
 	})
 }),
 }
