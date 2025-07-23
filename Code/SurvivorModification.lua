@@ -95,11 +95,6 @@ end
 
 local function ApplyModifications()
 	-- debug("ApplyModifications() Executing")
-	-- Check if we should apply modifications
-	local apply_when = CurrentModOptions.ApplyWhen
-	if apply_when ~= "On Game Load" then
-		return
-	end
 
 	-- Determine which survivors to modify
 	local apply_to = CurrentModOptions.ApplyTo
@@ -133,7 +128,14 @@ local function ApplyModifications()
 	end
 end
 
-
 function OnMsg.LoadGame()
-	ApplyModifications()
+	if CurrentModOptions.ApplyWhen == "On Game Load" then
+		ApplyModifications()
+	end
+end
+
+function OnMsg.PreHumanInit()
+	if CurrentModOptions.ApplyWhen == "Survivor Joins & new game" then
+		ApplyModifications()
+	end
 end
