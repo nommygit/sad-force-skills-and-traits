@@ -2,12 +2,7 @@ local function debug(msg)
 	print("[Force Skills and Traits] "..msg)
 end
 
-local function ApplySkillChanges(survivor, skill_id)
-	local action = CurrentModOptions[skill_id .. "Action"]
-	local value = CurrentModOptions[skill_id .. "Value"]
-	local inclination = CurrentModOptions[skill_id .. "Inclination"]
-	
-	-- Apply skill level changes
+local function ApplySkillLevelChanges(survivor, skill_id, action, value)
 	if action and action ~= "Don't change" then
 		local current_level = survivor:GetSkillLevel(skill_id)
 		
@@ -23,8 +18,9 @@ local function ApplySkillChanges(survivor, skill_id)
 			end
 		end
 	end
-	
-	-- Apply inclination changes
+end
+
+local function ApplySkillInclinationChanges(survivor, skill_id, inclination)
 	if inclination and inclination ~= "Don't change" then
 		local current_inclination = survivor:GetSkillInclination(skill_id)
 		
@@ -44,6 +40,24 @@ local function ApplySkillChanges(survivor, skill_id)
 			end
 		end
 	end
+end
+
+local function ApplySkillChanges(survivor, skill_id)
+	local action, value, inclination
+
+	-- Apply any *All Skills* options first
+	action = CurrentModOptions["AllSkillsAction"]
+	value = CurrentModOptions["AllSkillsValue"]
+	inclination = CurrentModOptions["AllSkillsInclination"]
+	ApplySkillLevelChanges(survivor, skill_id, action, value)
+	ApplySkillInclinationChanges(survivor, skill_id, inclination)
+
+	-- Apply any individual skill options
+	action = CurrentModOptions[skill_id .. "Action"]
+	value = CurrentModOptions[skill_id .. "Value"]
+	inclination = CurrentModOptions[skill_id .. "Inclination"]
+	ApplySkillLevelChanges(survivor, skill_id, action, value)
+	ApplySkillInclinationChanges(survivor, skill_id, inclination)
 end
 
 local function ApplyTraitChanges(survivor, trait_id)
