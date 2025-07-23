@@ -8,6 +8,17 @@ FSaT_Templates = {
 	-- AllSkillsOptions.lua
 
 	['AllSkillsOptions'] = {
+		{ class = 'ModItemOptionChoice', args = {
+				'name', "AllSkillsAction",
+				'DisplayName', "*All Skills*",
+				'Help', "Change the value for every skill.   Will be overriden by individual skill options set below e.g Combat",
+				'DefaultValue', "Don't change",
+				'ChoiceList', {
+					"Don't change",
+					"Set to:",
+					"Set to Minimum of:",
+					"Set to Maximum of:"}
+		} },
 		{ class = 'ModItemOptionNumber', args = {
 				'name', "AllSkillsValue",
 				'NameColor', RGBA(191, 183, 175, 255),
