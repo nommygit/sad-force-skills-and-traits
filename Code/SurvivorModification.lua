@@ -61,17 +61,17 @@ local function ApplySkillChanges(survivor, skill_id)
 end
 
 local function ApplyTraitChanges(survivor, trait_id)
-	-- local action = CurrentModOptions[trait_id]
+	local action = CurrentModOptions[trait_id]
 	
-	-- if action == "Add" then
-	-- 	if not survivor:HasTrait(trait_id) then
-	-- 		survivor:AddTrait(trait_id)
-	-- 	end
-	-- elseif action == "Remove" then
-	-- 	if survivor:HasTrait(trait_id) then
-	-- 		survivor:RemoveTrait(trait_id)
-	-- 	end
-	-- end
+	if action == "Add" then
+		if not survivor:HasTrait(trait_id) then
+			survivor:AddTrait(trait_id)
+		end
+	elseif action == "Remove" then
+		if survivor:HasTrait(trait_id) then
+			survivor:RemoveTrait(trait_id)
+		end
+	end
 end
 
 function ApplyModificationsToSurvivor(survivor)
@@ -82,9 +82,9 @@ function ApplyModificationsToSurvivor(survivor)
 	end)
 	
 	-- Apply trait modifications
-	-- ForEachPreset("Trait", function(trait)
-	-- 	ApplyTraitChanges(survivor, trait.id)
-	-- end)
+	ForEachPreset("Trait", function(trait)
+		ApplyTraitChanges(survivor, trait.id)
+	end)
 end
 
 function ApplyModifications()
