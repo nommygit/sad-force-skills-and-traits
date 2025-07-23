@@ -1,3 +1,7 @@
+local function debug(msg)
+	print("[Force Skills and Traits] "..msg)
+end
+
 local function ApplySkillChanges(survivor, skill_id)
 	local action = CurrentModOptions[skill_id .. "Action"]
 	local value = CurrentModOptions[skill_id .. "Value"]
@@ -56,7 +60,8 @@ local function ApplyTraitChanges(survivor, trait_id)
 	-- end
 end
 
-local function ApplyModifications(survivor)
+function ApplyModificationsToSurvivor(survivor)
+	debug("ApplyModificationsToSurvivor("..tostring(survivor)..")")
 	-- Apply skill modifications
 	ForEachPreset("Skill", function(skill)
 		ApplySkillChanges(survivor, skill.id)
@@ -68,7 +73,8 @@ local function ApplyModifications(survivor)
 	-- end)
 end
 
-function OnMsg.LoadGame()
+function ApplyModifications()
+	debug("ApplyModifications() Executing")
 	-- Check if we should apply modifications
 	local apply_when = CurrentModOptions.ApplyWhen
 	if apply_when ~= "On Game Load" then
@@ -101,7 +107,13 @@ function OnMsg.LoadGame()
 	-- Apply modifications to selected survivors
 	for _, survivor in ipairs(targets) do
 		if not survivor:IsDead() then
-			ApplyModifications(survivor)
+			ApplyModificationsToSurvivor(survivor)
 		end
 	end
+end
+
+
+function OnMsg.LoadGame()
+	debug("OnMsg.LoadGame() Executing")
+	ApplyModifications()
 end
