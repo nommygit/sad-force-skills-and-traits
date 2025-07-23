@@ -60,9 +60,7 @@ local function ApplySkillChanges(survivor, skill_id)
 	ApplySkillInclinationChanges(survivor, skill_id, inclination)
 end
 
-local function ApplyTraitChanges(survivor, trait_id)
-	local action = CurrentModOptions[trait_id]
-	
+local function ApplyTraitChanges(survivor, trait_id, action)	
 	if action == "Add" then
 		if not survivor:HasTrait(trait_id) then
 			survivor:SetTrait(trait_id, true, "forced")
@@ -82,8 +80,16 @@ function ApplyModificationsToSurvivor(survivor)
 	end)
 	
 	-- Apply trait modifications
+	local allTraitsAction = CurrentModOptions["AllTraitsAction"]
 	ForEachPreset("Trait", function(trait)
-		ApplyTraitChanges(survivor, trait.id)
+		local trait_id = trait.id
+
+		-- Apply *All Traits* changes first
+		ApplyTraitChanges(survivor, trait_id, allTraitsAction)
+
+		-- Apply individual trait changes
+		local action = CurrentModOptions[trait_id]
+		ApplyTraitChanges(survivor, trait_id, action)
 	end)
 end
 
