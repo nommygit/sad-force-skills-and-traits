@@ -1,3 +1,12 @@
+-- Logging helper functions
+local function logWarning(message)
+	print("[Force Skills and Traits] WARNING: " .. message)
+end
+
+local function logError(message)
+	print("[Force Skills and Traits] ERROR: " .. message)
+end
+
 -- Returns a sorted table array containing the full names of all defined survivors (CharacterDefs)
 local function FSaT_SurvivorNamesArray()
 	local names = {}

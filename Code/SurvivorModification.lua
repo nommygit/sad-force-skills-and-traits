@@ -1,5 +1,10 @@
-local function debug(msg)
-	print("[Force Skills and Traits] "..msg)
+-- Logging helper functions
+local function logWarning(message)
+	print("[Force Skills and Traits] WARNING: " .. message)
+end
+
+local function logError(message)
+	print("[Force Skills and Traits] ERROR: " .. message)
 end
 
 local function ApplySkillLevelChanges(survivor, skill_id, action, value)
@@ -73,7 +78,7 @@ local function ApplyTraitChanges(survivor, trait_id, action)
 end
 
 local function ApplyModificationsToSurvivor(survivor)
-	-- debug("ApplyModificationsToSurvivor("..tostring(survivor.id)..")")
+	-- logWarning("ApplyModificationsToSurvivor("..tostring(survivor.id)..")")
 	-- Apply skill modifications
 	ForEachPreset("Skill", function(skill)
 		ApplySkillChanges(survivor, skill.id)
@@ -94,7 +99,7 @@ local function ApplyModificationsToSurvivor(survivor)
 end
 
 local function ApplyModifications()
-	-- debug("ApplyModifications() Executing")
+	-- logWarning("ApplyModifications() Executing")
 
 	-- Determine which survivors to modify
 	local apply_to = CurrentModOptions.ApplyTo
