@@ -65,11 +65,11 @@ local function ApplyTraitChanges(survivor, trait_id)
 	
 	if action == "Add" then
 		if not survivor:HasTrait(trait_id) then
-			survivor:AddTrait(trait_id)
+			survivor:SetTrait(trait_id, true, "forced")
 		end
 	elseif action == "Remove" then
 		if survivor:HasTrait(trait_id) then
-			survivor:RemoveTrait(trait_id)
+			survivor:SetTrait(trait_id, false, "forced")
 		end
 	end
 end
