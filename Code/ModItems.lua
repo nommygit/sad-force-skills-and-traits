@@ -7,64 +7,58 @@ local function logError(message)
 	print("[Force Skills and Traits] ERROR: " .. message)
 end
 
--- Returns a sorted table array containing the full names of all defined survivors (CharacterDefs)
-local function FSaT_SurvivorNamesArray()
+--[[
+	Returns a sorted table array containing the full names of all defined survivors (CharacterDefs)
+]]
+local function SurvivorNamesArray()
 	local names = {}
+		
 	ForEachPreset("CharacterDef", function(unit, group) 
-		table.insert(names, _InternalTranslate(unit.FirstName).." ".._InternalTranslate(unit.LastName))
+		if unit and unit.FirstName and unit.LastName then
+			table.insert(names, _InternalTranslate(unit.FirstName).." ".._InternalTranslate(unit.LastName))
+		end
 	end)
+	
 	table.sort(names, function(a, b)
 		return a < b
 	end)
+	
 	return names
 end
 
--- Returns a table which is tbl with survivor names added to the end
-local function FSaT_AppendSurvivorNamesArray(tbl)
-	local survivorNames = FSaT_SurvivorNamesArray() or {}
+--[[
+	Appends survivor names to a table
+]]
+local function AppendSurvivorNamesArray(tbl)
+	if type(tbl) ~= "table" then
+		logError("AppendSurvivorNamesArray: Invalid table parameter")
+		return {}
+	end
+	
+	local survivorNames = SurvivorNamesArray() or {}
 	for _, name in ipairs(survivorNames) do
 		table.insert(tbl, name)
 	end
 	return tbl
 end
 
--- 
-function FSaT_OptionApplyToChoiceList()
-	return FSaT_AppendSurvivorNamesArray({"*All Survivors*"})
+--[[
+	Creates choice list for "Apply To" option
+	@return table: Array containing "*All Survivors*" and survivor names
+]]
+local function FSaT_OptionApplyToChoiceList()
+	return AppendSurvivorNamesArray({"*All Survivors*"})
 end
 
 --[[
-Substitute(template, values)
-
-Recursively replaces placeholders in a string or table template using a values table.
-
-Arguments:
-	template (string or table): A string or nested table containing placeholders
-		in the format "{$key}" to be replaced.
-	values (table, optional): A key–value table containing substitutions. Each key replaces
-		occurrences of "{$key}" in strings within the template. If nil or empty, the template is returned unchanged.
-
-Returns:
-	A new string or table with all matching placeholders replaced.
-
-Notes:
-	- {$FSaT_OptionApplyToChoiceList()}" is replaced with result of FSaT_OptionApplyToChoiceList()
-	- If `values` is nil or empty, the original template is returned unchanged.
-	- Subtables are processed recursively.
-	- If a value is a table, it is joined with ", ".
-	- Non-matching keys are replaced with an empty string.
-
-Example:
-	local template = {
-		title = "Welcome, {$user}!",
-		options = { "Option: {$opt1}", "Option: {$opt2}" }
-	}
-	local values = { user = "Alex", opt1 = "A", opt2 = "B" }
-	local result = Substitute(template, values)
+	Recursively replaces placeholders in a string or table template
+	@param template string|table: Template with {$key} placeholders
+	@param values table: Key-value substitutions
+	@return string|table: Template with substitutions applied
 ]]
 local function Substitute(template, values)
 	if type(template) == "string" then
-		-- Add all character names to Apply To option choices
+		-- Handle special substitution for survivor list
 		if template == "{$FSaT_OptionApplyToChoiceList()}" then
 			return FSaT_OptionApplyToChoiceList()
 		end
@@ -83,7 +77,6 @@ local function Substitute(template, values)
 	elseif type(template) == "table" then
 		local out = {}
 		for k, v in pairs(template) do
-			-- Recursively process all table elements
 			out[k] = Substitute(v, values)
 		end
 		return out
@@ -92,77 +85,79 @@ local function Substitute(template, values)
 	end
 end
 
---[[ 
-DeepCopy(orig, copies)
-
-Performs a deep copy of a table, preserving nested structures, keys, values, and metatables. 
-Supports recursive and self-referencing tables safely.
-
-Arguments:
-	orig (any): The value to copy. If not a table, it's returned as-is.
-	copies (table, optional): Internal table to track already-copied tables. 
-		Used to handle circular references and shared references correctly.
-
-Returns:
-	A new deep-copied version of the input `orig`.
-
-Notes:
-	- Handles circular references.
-	- Preserves metatables with setmetatable().
-	- Table keys and values are deep copied recursively.
-	- Non-table values (numbers, strings, booleans, etc.) are returned unchanged.
-	- Shared references in the original table will remain shared in the copy.
+--[[
+	Performs deep copy of a table
+	@param orig any: Value to copy
+	@param copies table: Internal tracker for circular references
+	@return any: Deep copy of original value
 ]]
 local function DeepCopy(orig, copies)
+	-- Handle non-table values
+	if type(orig) ~= "table" then 
+		return orig 
+	end
+	
+	-- Initialize copies tracker
 	copies = copies or {}
-	if type(orig) ~= "table" then return orig end
-	if copies[orig] then return copies[orig] end
-
+	
+	-- Check for circular references
+	if copies[orig] then 
+		return copies[orig] 
+	end
+	
+	-- Create new table and track it
 	local copy = {}
 	copies[orig] = copy
 
+	-- Recursively copy keys and values
 	for k, v in next, orig, nil do
 		copy[DeepCopy(k, copies)] = DeepCopy(v, copies)
 	end
 
+	-- Preserve metatable
 	return setmetatable(copy, getmetatable(orig))
 end
 
 --[[
-CreateModItemsFromTemplate(template)
-
-Instantiates mod items from a template of PlaceObj definitions.
-
-Returns:
-	table array: a list of PlaceObj instances (like the mod editor would create).
+	Creates mod items from a template
+	@param template table: Array of PlaceObj definitions
+	@return table: Array of created PlaceObj instances
 ]]
 local function CreateModItemsFromTemplate(template)
+	if type(template) ~= "table" then
+		logError("CreateModItemsFromTemplate: Invalid template")
+		return {}
+	end
+	
 	local items = {}
 	for _, item_def in ipairs(template) do
-		table.insert(items, PlaceObj(item_def.class, item_def.args))
+		if item_def and item_def.class and item_def.args then
+			table.insert(items, PlaceObj(item_def.class, item_def.args))
+		else
+			logWarning("CreateModItemsFromTemplate: Invalid item definition")
+		end
 	end
 	return items
 end
 
 --[[
-GenerateAndAppendModItems(dest, template, substituteValues)
-
-Appends a substituted copy of a template into a destination array.
-
-Arguments:
-	dest (table): Array‑style table to receive new entries.
-	template (table): Array of PlaceObj–style entries with "{$…}" placeholders.
-	substituteValues (table): Key–value map for placeholder replacement.
-
-Behavior:
-	1. Deep‑copies `template` (preserving metatables and avoiding shared state).
-	2. Runs `Substitute()` on the copy to replace all placeholders.
-	3. Uses `table.move()` to append every element from the substituted copy into `dest`.
-
-Returns:
-	The modified `dest` table (for chaining).
---]]
+	Appends substituted template items to destination table
+	@param dest table: Destination array
+	@param template table: Template to process
+	@param substituteValues table: Substitution values
+	@return table: Modified destination table
+]]
 local function GenerateAndAppendModItems(dest, template, substituteValues)
+	if type(dest) ~= "table" then
+		logError("GenerateAndAppendModItems: Invalid dest parameter")
+		return {}
+	end
+	
+	if type(template) ~= "table" then
+		logError("GenerateAndAppendModItems: Invalid template")
+		return dest
+	end
+	
 	-- Deep copy and substitute template
 	local templateCopy = Substitute(DeepCopy(template), substituteValues)
 	
@@ -177,9 +172,11 @@ local function GenerateAndAppendModItems(dest, template, substituteValues)
 	return dest
 end
 
--- Returns array table of Skills sorted by SortKey
+--[[
+	Returns sorted skills array
+]]
 local function SortedSkills()
-	sortedSkills = {}
+	local sortedSkills = {}
 	for _, skill in pairs(Skills) do
 		table.insert(sortedSkills, skill)
 	end
@@ -189,11 +186,14 @@ local function SortedSkills()
 	return sortedSkills
 end
 
--- Returns array table of Traits sorted by DisplayName excluding hidden and 'Special and events' traits
+--[[
+	Returns sorted visible traits
+	@return table: Traits sorted by DisplayName, excluding hidden and special traits
+]]
 local function SortedTraits()
-	sortedTraits = {}
+	local sortedTraits = {}
 	for _, trait in pairs(Traits) do
-		-- Don't include hidden or 'Special and events' traits  
+		-- Exclude hidden and special traits
 		if (not trait.HiddenTrait) and trait.group ~= "Special and events" then
 			table.insert(sortedTraits, trait)
 		end
@@ -204,15 +204,27 @@ local function SortedTraits()
 	return sortedTraits
 end
 
+--[[
+	Builds enhanced trait description
+	@param trait table: Trait definition
+	@return string: Enhanced description with incompatibility info
+]]
 local function BuildTraitDescription(trait)
+	if not trait then
+		logWarning("BuildTraitDescription: Invalid trait")
+		return ""
+	end
+	
 	local description = _InternalTranslate(trait.Description)
+	
+	-- Add incompatibility information if available
 	if trait.Incompatible and #trait.Incompatible > 0 then
 		description = description..".  Incompatible with: "
 		local incompatible = trait.Incompatible
 		local addComma = false
 		for i, id in ipairs(incompatible) do
 			local incompatibleTrait = Traits[id]
-			if incompatibleTrait then
+			if incompatibleTrait and incompatibleTrait.DisplayName then
 				if addComma then description = description..", " end
 				description = description.._InternalTranslate(incompatibleTrait.DisplayName)
 				addComma = true
@@ -223,45 +235,51 @@ local function BuildTraitDescription(trait)
 end
 
 --[[
-FSaT_BuildItems()    run from items.lua
-
-Constructs and returns a sequenced list of mod‑option objects by:
-  1. Instantiating core templates (ModCodeItems, ApplyOptions)
-  2. Inserting formatting gaps
-  3. Generating entries for every loaded skill (with translated names and descriptions)
-  4. Inserting a second formatting gap
-  5. Generating entries for every visible trait (excluding hidden or “Special and events”)
-
-Usage:
-	-- in items.lua
-	return FSaT_BuildItems()
-
-Returns:
-	An array of PlaceObj instances representing all mod options in order.
+	Main item construction function
+	@return table: Array of PlaceObj instances representing mod options and any other items
 ]]
 function FSaT_BuildItems()
-	items = {}
+	-- Check required global exists
+	if not FSaT_Templates then
+		logError("FSaT_Templates not defined")
+		return {}
+	end
+	
+	local items = {}
+	
+	-- Build core options
 	GenerateAndAppendModItems(items, FSaT_Templates.ModCodeItems)
 	GenerateAndAppendModItems(items, FSaT_Templates.ApplyOptions)
 	GenerateAndAppendModItems(items, FSaT_Templates.DisplayFormattingGapOption, {id=1})
 	GenerateAndAppendModItems(items, FSaT_Templates.AllSkillsOptions)
-	sortedSkills = SortedSkills()
+	
+	-- Add skill options
+	local sortedSkills = SortedSkills()
 	for _, skill in pairs(sortedSkills) do
-		GenerateAndAppendModItems(items, FSaT_Templates.SkillOptions, {
-			id = skill.id,
-			DisplayName = _InternalTranslate(skill.DisplayName),
-			Description = _InternalTranslate(skill.Description)
-		})
+		if skill and skill.id and skill.DisplayName then
+			GenerateAndAppendModItems(items, FSaT_Templates.SkillOptions, {
+				id = skill.id,
+				DisplayName = _InternalTranslate(skill.DisplayName),
+				Description = _InternalTranslate(skill.Description)
+			})
+		end
 	end
+	
+	-- Add formatting gap
 	GenerateAndAppendModItems(items, FSaT_Templates.DisplayFormattingGapOption, {id=2})
 	GenerateAndAppendModItems(items, FSaT_Templates.AllTraitsOptions)
-	sortedTraits = SortedTraits()
+	
+	-- Add trait options
+	local sortedTraits = SortedTraits()
 	for _, trait in pairs(sortedTraits) do
-		GenerateAndAppendModItems(items, FSaT_Templates.TraitOptions, {
-			id = trait.id,
-			DisplayName = _InternalTranslate(trait.DisplayName),
-			Description = BuildTraitDescription(trait)
-		})
+		if trait and trait.id and trait.DisplayName then
+			GenerateAndAppendModItems(items, FSaT_Templates.TraitOptions, {
+				id = trait.id,
+				DisplayName = _InternalTranslate(trait.DisplayName),
+				Description = BuildTraitDescription(trait)
+			})
+		end
 	end
+	
 	return items
 end
