@@ -72,8 +72,8 @@ local function ApplyTraitChanges(survivor, trait_id, action)
 	end
 end
 
-function ApplyModificationsToSurvivor(survivor)
-	debug("ApplyModificationsToSurvivor("..tostring(survivor.id)..")")
+local function ApplyModificationsToSurvivor(survivor)
+	-- debug("ApplyModificationsToSurvivor("..tostring(survivor.id)..")")
 	-- Apply skill modifications
 	ForEachPreset("Skill", function(skill)
 		ApplySkillChanges(survivor, skill.id)
@@ -93,8 +93,8 @@ function ApplyModificationsToSurvivor(survivor)
 	end)
 end
 
-function ApplyModifications()
-	debug("ApplyModifications() Executing")
+local function ApplyModifications()
+	-- debug("ApplyModifications() Executing")
 	-- Check if we should apply modifications
 	local apply_when = CurrentModOptions.ApplyWhen
 	if apply_when ~= "On Game Load" then
@@ -135,6 +135,5 @@ end
 
 
 function OnMsg.LoadGame()
-	debug("OnMsg.LoadGame() Executing")
 	ApplyModifications()
 end
