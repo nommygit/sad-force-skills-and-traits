@@ -225,7 +225,9 @@ end
 	Game load handler
 ]]
 function OnMsg.LoadGame()
-	if CurrentModOptions.ApplyWhen == "On Game Load" then
+	local applyWhenOption = CurrentModOptions.ApplyWhen
+	if applyWhenOption == "On Game Load" 
+	or applyWhenOption == "New+Load Game, Survivor Joins" then
 		-- Delayed execution wrapper required for code to work
 		CreateGameTimeThread(function()
 			Sleep(100)  -- Allow colony initialization
@@ -238,7 +240,9 @@ end
 	New survivor initialization handler
 ]]
 function OnMsg.PreHumanInit()
-	if CurrentModOptions.ApplyWhen == "Survivor Joins & new game" then
+	local applyWhenOption = CurrentModOptions.ApplyWhen
+	if applyWhenOption == "Survivor Joins & new game" 
+	or applyWhenOption == "New+Load Game, Survivor Joins" then
 		-- Delayed execution wrapper required for code to work
 		CreateGameTimeThread(function()
 			Sleep(100)  -- Allow colony initialization

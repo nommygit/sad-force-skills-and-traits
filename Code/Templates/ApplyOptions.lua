@@ -7,6 +7,7 @@ PlaceObj('ModItemOptionChoice', {
 	'ChoiceList', {
 		"Survivor Joins & new game",
 		"On Game Load",
+		"New+Load Game, Survivor Joins"
 		"Never (disable mod)",
 	},
 }),
