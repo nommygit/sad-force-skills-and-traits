@@ -220,7 +220,11 @@ end
 ]]
 function OnMsg.LoadGame()
 	if CurrentModOptions.ApplyWhen == "On Game Load" then
+		-- Delayed execution wrapper required for code to work
+		CreateGameTimeThread(function()
+			Sleep(100)  -- Allow colony initialization
 		ApplyModifications()
+		end)
 	end
 end
 
@@ -229,6 +233,10 @@ end
 ]]
 function OnMsg.PreHumanInit()
 	if CurrentModOptions.ApplyWhen == "Survivor Joins & new game" then
+-- Delayed execution wrapper required for code to work
+		CreateGameTimeThread(function()
+			Sleep(100)  -- Allow colony initialization
 		ApplyModifications()
+		end)
 	end
 end
