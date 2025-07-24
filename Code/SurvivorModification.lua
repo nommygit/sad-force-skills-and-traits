@@ -7,6 +7,12 @@ local function logError(message)
 	print("[Force Skills and Traits] ERROR: " .. message)
 end
 
+-- removes html like tags from strings giving just the inner text
+function extractPlainText(s)
+    if s == nil then return "" end
+    return (s:gsub("</?[a-zA-Z][^>]*>", ""))
+end
+
 --[[
 	Applies skill level changes to a survivor
 ]]
@@ -108,16 +114,16 @@ local function ApplySkillChanges(survivor, skill_id)
 	local action, value, inclination
 
 	-- Apply any *All Skills* options first
-	action = CurrentModOptions["AllSkillsAction"]
+	action = extractPlainText(CurrentModOptions["AllSkillsAction"])
 	value = CurrentModOptions["AllSkillsValue"]
-	inclination = CurrentModOptions["AllSkillsInclination"]
+	inclination = extractPlainText(CurrentModOptions["AllSkillsInclination"])
 	ApplySkillLevelChanges(survivor, skill_id, action, value)
 	ApplySkillInclinationChanges(survivor, skill_id, inclination)
 
 	-- Apply any individual skill options
-	action = CurrentModOptions[skill_id .. "Action"]
+	action = extractPlainText(CurrentModOptions[skill_id .. "Action"])
 	value = CurrentModOptions[skill_id .. "Value"]
-	inclination = CurrentModOptions[skill_id .. "Inclination"]
+	inclination = extractPlainText(CurrentModOptions[skill_id .. "Inclination"])
 	ApplySkillLevelChanges(survivor, skill_id, action, value)
 	ApplySkillInclinationChanges(survivor, skill_id, inclination)
 end
@@ -164,7 +170,7 @@ local function ApplyModificationsToSurvivor(survivor)
 	end)
 	
 	-- Apply trait modifications
-	local allTraitsAction = CurrentModOptions["AllTraitsAction"]
+	local allTraitsAction = extractPlainText(CurrentModOptions["AllTraitsAction"])
 	ForEachPreset("Trait", function(trait)
 		local trait_id = trait.id
 
@@ -172,7 +178,7 @@ local function ApplyModificationsToSurvivor(survivor)
 		ApplyTraitChanges(survivor, trait_id, allTraitsAction)
 
 		-- Apply individual trait changes
-		local action = CurrentModOptions[trait_id]
+		local action = extractPlainText(CurrentModOptions[trait_id])
 		ApplyTraitChanges(survivor, trait_id, action)
 	end)
 end
