@@ -9,8 +9,8 @@ end
 
 -- removes html like tags from strings giving just the inner text
 function extractPlainText(s)
-    if s == nil then return "" end
-    return (s:gsub("</?[a-zA-Z][^>]*>", ""))
+	if s == nil then return "Don't change" end
+	return (s:gsub("</?[a-zA-Z][^>]*>", ""))
 end
 
 --[[
