@@ -3,9 +3,9 @@ PlaceObj('ModItemOptionChoice', {
 	'name', "{$id}",
 	'DisplayName', "{$DisplayName}",
 	'Help', "{$Description}",
-	'DefaultValue', "Don't change",
+	'DefaultValue', "<color 20 20 20 255>Don't change</color>",
 	'ChoiceList', {
-		"Don't change",
+		"<color 20 20 20 255>Don't change</color>",
 		"Add",
 		"Remove",
 	},

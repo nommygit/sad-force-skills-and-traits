@@ -3,9 +3,9 @@ PlaceObj('ModItemOptionChoice', {
 	'name', "{$id}Action",
 	'DisplayName', "{$DisplayName}",
 	'Help', "{$Description}",
-	'DefaultValue', "Don't change",
+	'DefaultValue', "<color 20 20 20 255>Don't change</color>",
 	'ChoiceList', {
-		"Don't change",
+		"<color 20 20 20 255>Don't change</color>",
 		"Set to:",
 		"Set to Minimum of:",
 		"Set to Maximum of:",
@@ -24,9 +24,9 @@ PlaceObj('ModItemOptionChoice', {
 	'name', "{$id}Inclination",
 	'DisplayName', "{$DisplayName} Inclination",
 	'Help', "{$Description}",
-	'DefaultValue', "Don't change",
+	'DefaultValue', "<color 20 20 20 255>Don't change</color>",
 	'ChoiceList', {
-		"Don't change",
+		"<color 20 20 20 255>Don't change</color>",
 		"Set to Interested",
 		"Set to Normal",
 		"Set to Indifferent",
