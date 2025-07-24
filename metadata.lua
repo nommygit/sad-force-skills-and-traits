@@ -1,9 +1,12 @@
 return PlaceObj('ModDef', {
 	'title', "Force Skills and Traits",
 	'description', "Options to control changing skills and traits of survivors.\n\nBy default makes no changes.\n\nCan be used to:\n - 'Character Editor' (make specific changes to a single survivor on game load)\n - Remove unwanted traits\n - Set skills, interests and traits for every survivor that joins\n - Set minimum or maximum skill level",
+	'image', "Mod/zzzzzFS/Images/icon.png",
+	'last_changes', "Add some screenshots",
 	'id', "zzzzzFS",
 	'author', "Nommy",
-	'version', 13,
+	'version_minor', 1,
+	'version', 14,
 	'lua_revision', 233360,
 	'saved_with_revision', 352677,
 	'code', {
@@ -12,6 +15,12 @@ return PlaceObj('ModDef', {
 		"Code/SurvivorModification.lua",
 	},
 	'has_options', true,
-	'saved', 1753198546,
-	'code_hash', -3909531390820050888,
+	'saved', 1753379855,
+	'code_hash', 1105825104160655869,
+	'screenshot1', "Mod/zzzzzFS/Images/Example - All survivors on join.png",
+	'screenshot2', "Mod/zzzzzFS/Images/Example set Daniel combat to 6.png",
+	'screenshot3', "Mod/zzzzzFS/Images/Example no idiots, just writers.png",
+	'screenshot4', "Mod/zzzzzFS/Images/Dynamic options load mod skills and traits.png",
+	'screenshot5', "Mod/zzzzzFS/Images/items.lua.png",
+	'reapply_options_on_reload', true,
 })
