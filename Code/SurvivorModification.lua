@@ -82,8 +82,7 @@ local function ApplySkillInclinationChanges(survivor, skill_id, inclination)
 			return
 		end
 		
-		local current_inclination = survivor:GetSkillInclination(skill_id)
-		
+		local current_inclination_id = survivor:GetSkillInclination(skill_id).id
 		if inclination == "Set to Interested" then
 			survivor:SetSkillInclination(skill_id, "Interested")
 		elseif inclination == "Set to Normal" then
@@ -91,11 +90,11 @@ local function ApplySkillInclinationChanges(survivor, skill_id, inclination)
 		elseif inclination == "Set to Indifferent" then
 			survivor:SetSkillInclination(skill_id, "Indifferent")
 		elseif inclination == "Change Indifferent to Normal" then
-			if current_inclination == "Indifferent" then
+			if current_inclination_id == "Indifferent" then
 				survivor:SetSkillInclination(skill_id, "Normal")
 			end
 		elseif inclination == "Change Interested to Normal" then
-			if current_inclination == "Interested" then
+			if current_inclination_id == "Interested" then
 				survivor:SetSkillInclination(skill_id, "Normal")
 			end
 		end
