@@ -95,12 +95,15 @@ FSaT_Templates = {
 
 	['ModCodeItems'] = {
 		{ class = 'ModItemCode', args = {
+				'name', "Templates",
 				'CodeFileName', "Code/Templates.lua"
 		} },
 		{ class = 'ModItemCode', args = {
+				'name', "ModItems",
 				'CodeFileName', "Code/ModItems.lua"
 		} },
 		{ class = 'ModItemCode', args = {
+				'name', "SurvivorModification",
 				'CodeFileName', "Code/SurvivorModification.lua"
 		} }
 	},
