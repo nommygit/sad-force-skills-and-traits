@@ -33,6 +33,12 @@ local function ApplySkillLevelChanges(survivor, skill_id, action, value)
 		end
 		
 		local current_level = survivor:GetSkillLevel(skill_id)
+		if not current_level then
+			logWarning("Failed to get current_level ApplySkillLevelChanges for survivor.id, skill_id: " .. survivor.id .. ", " .. skill_id)
+		elseif type(current_level) ~= "number" then
+			logWarning("Invalid current_level type in ApplySkillLevelChanges for action: " .. action)
+			return
+		end
 		
 		if action == "Set to:" then
 			survivor:SetSkillLevel(skill_id, value, "silent")
@@ -223,7 +229,7 @@ function OnMsg.LoadGame()
 		-- Delayed execution wrapper required for code to work
 		CreateGameTimeThread(function()
 			Sleep(100)  -- Allow colony initialization
-		ApplyModifications()
+			ApplyModifications()
 		end)
 	end
 end
@@ -233,10 +239,10 @@ end
 ]]
 function OnMsg.PreHumanInit()
 	if CurrentModOptions.ApplyWhen == "Survivor Joins & new game" then
--- Delayed execution wrapper required for code to work
+		-- Delayed execution wrapper required for code to work
 		CreateGameTimeThread(function()
 			Sleep(100)  -- Allow colony initialization
-		ApplyModifications()
+			ApplyModifications()
 		end)
 	end
 end
